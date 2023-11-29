@@ -1,0 +1,119 @@
+---
+title: "Classification"
+author: "Adithya Harish"
+---
+
+# Classification
+
+Classification in machine learning is a type of supervised learning approach where the goal is to predict the categorical class labels of new instances, based on past observations. In simpler terms, it involves categorizing data into predefined classes or groups.
+
+We will be using Random Forest Classifier model.
+
+Random Forest is an ensemble learning method used for both classification and regression tasks, though it is more commonly known for classification. It operates by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees.
+
+## Step 1: Importing the Dataset
+Start by importing libraries and loading the dataset.
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+
+# Load the dataset
+dataset = pd.read_csv('winequality-red.csv')
+```
+
+## Step 2: Exploratory Data Analysis
+
+```{python}
+# Display basic info
+print(dataset.info())
+```
+
+```{python}
+# Summary statistics
+print(dataset.describe())
+```
+
+```{python}
+# Check for missing values
+print(dataset.isnull().sum())
+```
+
+```{python}
+# Visualize distributions of variables
+dataset.hist(bins=15, figsize=(15, 10))
+plt.show()
+```
+
+## Step 3: Data Preprocessing
+
+```{python}
+# Handling outliers or scaling if required (depends on dataset inspection)
+# from sklearn.preprocessing import StandardScaler
+# scaler = StandardScaler()
+# X_scaled = scaler.fit_transform(X)
+
+# Convert quality ratings into binary classification (good or bad)
+dataset['quality'] = np.where(dataset['quality'] > 6, 1, 0)
+
+```
+
+## Step 4: Splitting the Dataset
+
+```{python}
+X = dataset.drop('quality', axis=1)
+y = dataset['quality']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+```
+
+## Step 5: Building and Fitting the Model
+
+```{python}
+classifier = RandomForestClassifier(n_estimators=200, random_state=42)
+classifier.fit(X_train, y_train)
+
+```
+
+## Step 6: Model Predictions and Evaluation
+
+```{python}
+# Predictions
+y_pred = classifier.predict(X_test)
+
+# Evaluation
+
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+
+# Feature importance
+feature_importances = pd.DataFrame(classifier.feature_importances_,
+                                   index = X_train.columns,
+                                   columns=['importance']).sort_values('importance', ascending=False)
+print(feature_importances)
+
+```
+
+## Step 7: Visualizing the Results
+
+```{python}
+# Confusion matrix visualization
+conf_matrix = confusion_matrix(y_test, y_pred)
+sns.heatmap(conf_matrix, annot=True, fmt='g')
+plt.xlabel('Predicted labels')
+plt.ylabel('True labels')
+plt.show()
+
+```
+
+## Step 8: Testing Accuracy
+
+```{python}
+print("Accuracy:", accuracy_score(y_test, y_pred))
+```

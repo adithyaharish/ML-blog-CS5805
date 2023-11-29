@@ -1,0 +1,22 @@
+---
+title: "About"
+image: profile.png
+about:
+  template: jolla
+  links:
+    - icon: mail
+      text: Mail
+      href: https://adithyaharish@vt.edu
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/adithya-harish/
+    - icon: github
+      text: Github
+      href: https://github.com/adithyaharish
+
+---
+
+This is the Machine learning blog for the course CS5805.
+Created by:
+Adithya Harish Srinivasan Manikandan
+Ms cs 
