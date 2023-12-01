@@ -1,9 +1,9 @@
 # ML-blog-CS5805
 
-Done by:
-Adithya Harish Srinivasan Manikandan
+Done by:          
+Adithya Harish Srinivasan Manikandan     
 
-There are 5 blogs on the following topics:
+There are 5 blogs on the following topics:                 
     1. Probability theory and random variables       
     2. Clustering      
     3. Linear and nonlinear regression      
