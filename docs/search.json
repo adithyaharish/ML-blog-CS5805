@@ -1,52 +1,150 @@
 [
   {
-    "objectID": "posts/welcome/index.html",
-    "href": "posts/welcome/index.html",
-    "title": "Clustering",
-    "section": "",
-    "text": "Clustering in Machine Learning is an unsupervised learning technique used to group sets of objects in such a way that objects in the same group (or cluster) are more similar to each other than to those in other groups. Its main goal is to discover inherent groupings in data. We will be using MeanShift algorithm to perform clustering. MeanShift is a clustering algorithm that is unique for its capability to automatically detect the number of clusters and its flexibility in handling clusters of different shapes and sizes.\n\n\nFor this example, I’ll choose the “Wholesale customers data” dataset, which is also popular for clustering tasks. This dataset includes various features like Fresh, Milk, Grocery, Frozen, Detergents_Paper, and Delicatessen, representing annual spending in monetary units.\n\n\nCode\nimport pandas as pd\n\n# Loading the dataset\n# Note: Ensure you have downloaded the dataset from Kaggle beforehand\ndataset = pd.read_csv('Wholesale customers data.csv')\nprint(dataset.head())\n\n\n   Channel  Region  Fresh  Milk  Grocery  Frozen  Detergents_Paper  Delicassen\n0        2       3  12669  9656     7561     214              2674        1338\n1        2       3   7057  9810     9568    1762              3293        1776\n2        2       3   6353  8808     7684    2405              3516        7844\n3        1       3  13265  1196     4221    6404               507        1788\n4        2       3  22615  5410     7198    3915              1777        5185\n\n\n\n\n\n\n\nCode\nfrom sklearn.preprocessing import StandardScaler\n\n# Optional: Dropping non-essential features, if any\n# dataset = dataset.drop(['Feature_to_drop'], axis=1)\n\n# Feature scaling\nscaler = StandardScaler()\nscaled_data = scaler.fit_transform(dataset)\n\n\n\n\n\n\n\nCode\nfrom sklearn.cluster import MeanShift\n\n# Applying MeanShift algorithm\nmeanshift = MeanShift(bandwidth=2)\nmeanshift.fit(scaled_data)\n\n\nMeanShift(bandwidth=2)In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.MeanShiftMeanShift(bandwidth=2)\n\n\nAutomatic Detection of the Number of Clusters: Unlike many clustering algorithms like K-Means, MeanShift does not require the number of clusters to be specified beforehand. Instead, it automatically determines the number of clusters based on the data distribution and the bandwidth. This property is particularly useful when the number of clusters is not known a priori, or when the data might contain complex structures that aren’t well-suited to a predetermined number of clusters. In summary, MeanShift is a powerful clustering algorithm, especially useful in situations where the number of clusters is unknown or complex data structures are present. The choice of the bandwidth parameter is crucial and can significantly affect the outcome of the clustering process. Experimentation or methods like cross-validation might be required to find the optimal bandwidth for a given dataset.\nSignificance of Bandwidth: Role of Bandwidth: The bandwidth parameter is crucial in MeanShift and determines the size of the kernel or window that dictates which points are considered neighbors. Essentially, it sets the radius of the area within which points influence the computation of the mean.\nInfluence on Clusters:\nSmall Bandwidth: A smaller bandwidth leads to smaller kernels, considering fewer points as neighbors. This can result in detecting more clusters, with the possibility of overfitting and creating many small clusters. Large Bandwidth: A larger bandwidth includes more points in each kernel, potentially smoothing over local variations. This can result in fewer, larger clusters, but might miss finer details or subclusters in the data.\n\n\n\n\n\nCode\n# Extracting the cluster centers and labels\ncluster_centers = meanshift.cluster_centers_\nlabels = meanshift.labels_\n\n# Adding cluster information to the dataset\ndataset['Cluster'] = labels\n\n\n\n\n\nUse a pairplot to visualize relationships between different features, colored by clusters. Employ a heatmap to display the cluster centers, providing insights into the average behavior of each cluster.\n\n\nCode\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n# Pairplot for different features colored by clusters\nsns.pairplot(dataset, hue='Cluster', palette='viridis')\nplt.title('Pairplot of Features by Cluster')\nplt.show()\n\n# Heatmap of the cluster centers\nsns.heatmap(cluster_centers, annot=True, cmap='viridis')\nplt.title('Heatmap of Cluster Centers')\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\n\n\nCode\n# Compute the silhouette score\nfrom sklearn.metrics import silhouette_score\nfrom sklearn.metrics import calinski_harabasz_score\n\nlabels = meanshift.labels_\nsilhouette_avg = silhouette_score(scaled_data, labels)\nprint(f\"Silhouette Score: {silhouette_avg}\")\n\n# Assuming 'scaled_data' is your scaled dataset and 'labels' are the output of MeanShift\nch_score = calinski_harabasz_score(scaled_data, labels)\nprint(f\"Calinski-Harabasz Index: {ch_score}\")\n\n\nSilhouette Score: 0.2962304350024522\nCalinski-Harabasz Index: 58.188844470257834\n\n\n2D Scatter Plot with PCA: This will provide a visual representation of how the data points are clustered in a two-dimensional space.\n\n\nCode\nimport matplotlib.pyplot as plt\nfrom sklearn.decomposition import PCA\n\n# Reducing data to 2 dimensions using PCA\npca = PCA(n_components=2)\nreduced_data_2D = pca.fit_transform(scaled_data)\n\n# Plotting 2D scatter plot\nplt.figure(figsize=(8, 6))\nplt.scatter(reduced_data_2D[:, 0], reduced_data_2D[:, 1], c=labels, cmap='viridis', marker='o')\nplt.title('2D Scatter Plot of Clusters')\nplt.xlabel('Principal Component 1')\nplt.ylabel('Principal Component 2')\nplt.colorbar()\nplt.show()\n\n\n\n\n\n\n\nCode\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom pandas.plotting import parallel_coordinates\n\n# Assuming 'dataset' is your original DataFrame and 'labels' are the cluster labels from MeanShift\ndata_with_clusters = dataset.copy()\ndata_with_clusters['Cluster'] = labels\n\n# Parallel Coordinates Plot\nplt.figure(figsize=(12, 6))\nparallel_coordinates(data_with_clusters, 'Cluster', colormap='viridis')\nplt.title('Parallel Coordinates Plot of Clusters')\nplt.xlabel('Features')\nplt.ylabel('Values')\nplt.show()"
+    "objectID": "posts/probability-theory/index1.html#step-1---importing-the-dataset",
+    "href": "posts/probability-theory/index1.html#step-1---importing-the-dataset",
+    "title": "Probability Theory and Random Variables",
+    "section": "Step 1 - Importing the Dataset",
+    "text": "Step 1 - Importing the Dataset\nTo start, let’s import a real dataset from Kaggle. For this blog, we’ll use the “Titanic: Machine Learning from Disaster” dataset.\n\n\nCode\nimport pandas as pd\n\n# Load the Titanic dataset\ndata = pd.read_csv('train.csv')"
   },
   {
-    "objectID": "posts/welcome/index.html#step-1---importing-the-dataset",
-    "href": "posts/welcome/index.html#step-1---importing-the-dataset",
-    "title": "Clustering",
-    "section": "",
-    "text": "For this example, I’ll choose the “Wholesale customers data” dataset, which is also popular for clustering tasks. This dataset includes various features like Fresh, Milk, Grocery, Frozen, Detergents_Paper, and Delicatessen, representing annual spending in monetary units.\n\n\nCode\nimport pandas as pd\n\n# Loading the dataset\n# Note: Ensure you have downloaded the dataset from Kaggle beforehand\ndataset = pd.read_csv('Wholesale customers data.csv')\nprint(dataset.head())\n\n\n   Channel  Region  Fresh  Milk  Grocery  Frozen  Detergents_Paper  Delicassen\n0        2       3  12669  9656     7561     214              2674        1338\n1        2       3   7057  9810     9568    1762              3293        1776\n2        2       3   6353  8808     7684    2405              3516        7844\n3        1       3  13265  1196     4221    6404               507        1788\n4        2       3  22615  5410     7198    3915              1777        5185"
+    "objectID": "posts/probability-theory/index1.html#step-2-data-pre-processing",
+    "href": "posts/probability-theory/index1.html#step-2-data-pre-processing",
+    "title": "Probability Theory and Random Variables",
+    "section": "Step 2: Data Pre-processing",
+    "text": "Step 2: Data Pre-processing\nData pre-processing is a crucial step in any machine learning project. It involves handling missing values, encoding categorical variables, and scaling features. Let’s take a look at the data and perform some pre-processing.\n\n\nCode\n# Check for missing values\nmissing_values = data.isnull().sum()\nprint(missing_values)\n\n# Handle missing values (e.g., fill missing age values with the median)\ndata['Age'].fillna(data['Age'].median(), inplace=True)\n\n# Encode categorical variables (e.g., convert 'Sex' to numerical values)\ndata['Sex'] = data['Sex'].map({'male': 0, 'female': 1})\n\n# Select relevant features and target variable\nX = data[['Pclass', 'Sex', 'Age', 'Fare']]\ny = data['Survived']\n\n\nPassengerId      0\nSurvived         0\nPclass           0\nName             0\nSex              0\nAge            177\nSibSp            0\nParch            0\nTicket           0\nFare             0\nCabin          687\nEmbarked         2\ndtype: int64"
   },
   {
-    "objectID": "posts/welcome/index.html#step-2-data-pre-processing",
-    "href": "posts/welcome/index.html#step-2-data-pre-processing",
-    "title": "Clustering",
-    "section": "",
-    "text": "Code\nfrom sklearn.preprocessing import StandardScaler\n\n# Optional: Dropping non-essential features, if any\n# dataset = dataset.drop(['Feature_to_drop'], axis=1)\n\n# Feature scaling\nscaler = StandardScaler()\nscaled_data = scaler.fit_transform(dataset)"
+    "objectID": "posts/probability-theory/index1.html#step-3-splitting-the-test-and-train-sets",
+    "href": "posts/probability-theory/index1.html#step-3-splitting-the-test-and-train-sets",
+    "title": "Probability Theory and Random Variables",
+    "section": "Step 3: Splitting the Test and Train Sets",
+    "text": "Step 3: Splitting the Test and Train Sets\nTo evaluate our machine learning model, we’ll split the dataset into training and testing sets. We’ll use 80% of the data for training and 20% for testing.\n\n\nCode\nfrom sklearn.model_selection import train_test_split\n\n# Split the data into training and testing sets (80% train, 20% test)\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)"
   },
   {
-    "objectID": "posts/welcome/index.html#step-3-applying-the-meanshift-algorithm",
-    "href": "posts/welcome/index.html#step-3-applying-the-meanshift-algorithm",
-    "title": "Clustering",
-    "section": "",
-    "text": "Code\nfrom sklearn.cluster import MeanShift\n\n# Applying MeanShift algorithm\nmeanshift = MeanShift(bandwidth=2)\nmeanshift.fit(scaled_data)\n\n\nMeanShift(bandwidth=2)In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.MeanShiftMeanShift(bandwidth=2)\n\n\nAutomatic Detection of the Number of Clusters: Unlike many clustering algorithms like K-Means, MeanShift does not require the number of clusters to be specified beforehand. Instead, it automatically determines the number of clusters based on the data distribution and the bandwidth. This property is particularly useful when the number of clusters is not known a priori, or when the data might contain complex structures that aren’t well-suited to a predetermined number of clusters. In summary, MeanShift is a powerful clustering algorithm, especially useful in situations where the number of clusters is unknown or complex data structures are present. The choice of the bandwidth parameter is crucial and can significantly affect the outcome of the clustering process. Experimentation or methods like cross-validation might be required to find the optimal bandwidth for a given dataset.\nSignificance of Bandwidth: Role of Bandwidth: The bandwidth parameter is crucial in MeanShift and determines the size of the kernel or window that dictates which points are considered neighbors. Essentially, it sets the radius of the area within which points influence the computation of the mean.\nInfluence on Clusters:\nSmall Bandwidth: A smaller bandwidth leads to smaller kernels, considering fewer points as neighbors. This can result in detecting more clusters, with the possibility of overfitting and creating many small clusters. Large Bandwidth: A larger bandwidth includes more points in each kernel, potentially smoothing over local variations. This can result in fewer, larger clusters, but might miss finer details or subclusters in the data."
+    "objectID": "posts/probability-theory/index1.html#step-4-fitting-the-model-logistic-regression-to-the-training-set",
+    "href": "posts/probability-theory/index1.html#step-4-fitting-the-model-logistic-regression-to-the-training-set",
+    "title": "Probability Theory and Random Variables",
+    "section": "Step 4: Fitting the Model (Logistic Regression) to the Training Set",
+    "text": "Step 4: Fitting the Model (Logistic Regression) to the Training Set\nNow, let’s choose a machine learning algorithm to train our model. We’ll use logistic regression for this example.\n\n\nCode\nfrom sklearn.linear_model import LogisticRegression\n\n# Create a logistic regression model\nclf = LogisticRegression(random_state=42)\n\n# Fit the model to the training data\nclf.fit(X_train, y_train)\n\n\nLogisticRegression(random_state=42)In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.LogisticRegressionLogisticRegression(random_state=42)"
   },
   {
-    "objectID": "posts/welcome/index.html#step-4-analyzing-the-clusters",
-    "href": "posts/welcome/index.html#step-4-analyzing-the-clusters",
-    "title": "Clustering",
-    "section": "",
-    "text": "Code\n# Extracting the cluster centers and labels\ncluster_centers = meanshift.cluster_centers_\nlabels = meanshift.labels_\n\n# Adding cluster information to the dataset\ndataset['Cluster'] = labels"
+    "objectID": "posts/probability-theory/index1.html#step-5-predicting-test-results",
+    "href": "posts/probability-theory/index1.html#step-5-predicting-test-results",
+    "title": "Probability Theory and Random Variables",
+    "section": "Step 5: Predicting Test Results",
+    "text": "Step 5: Predicting Test Results\nWith our model trained, we can make predictions on the test data.\n\n\nCode\n# Predict survival outcomes for the test set\ny_pred = clf.predict(X_test)"
   },
   {
-    "objectID": "posts/welcome/index.html#step-5-visualizing-the-clusters",
-    "href": "posts/welcome/index.html#step-5-visualizing-the-clusters",
-    "title": "Clustering",
-    "section": "",
-    "text": "Use a pairplot to visualize relationships between different features, colored by clusters. Employ a heatmap to display the cluster centers, providing insights into the average behavior of each cluster.\n\n\nCode\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n# Pairplot for different features colored by clusters\nsns.pairplot(dataset, hue='Cluster', palette='viridis')\nplt.title('Pairplot of Features by Cluster')\nplt.show()\n\n# Heatmap of the cluster centers\nsns.heatmap(cluster_centers, annot=True, cmap='viridis')\nplt.title('Heatmap of Cluster Centers')\nplt.show()"
+    "objectID": "posts/probability-theory/index1.html#step-6-visualizing-the-test-results",
+    "href": "posts/probability-theory/index1.html#step-6-visualizing-the-test-results",
+    "title": "Probability Theory and Random Variables",
+    "section": "Step 6: Visualizing the Test Results",
+    "text": "Step 6: Visualizing the Test Results\nTo assess the model’s performance, we can create a confusion matrix and visualize it using a heatmap. Additionally, we’ll calculate and display classification metrics such as accuracy, precision, recall, and F1-score. This classification report provides valuable information about the model’s performance, including metrics for each class (survived and not survived).\n\n\nCode\nfrom sklearn.metrics import confusion_matrix, classification_report\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\n# Create a confusion matrix\nconf_matrix = confusion_matrix(y_test, y_pred)\n\n# Create a heatmap for the confusion matrix\nplt.figure(figsize=(8, 6))\nsns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=['Not Survived', 'Survived'], yticklabels=['Not Survived', 'Survived'])\nplt.xlabel('Predicted')\nplt.ylabel('Actual')\nplt.title('Confusion Matrix')\nplt.show()\n\n# Generate a classification report\nclass_report = classification_report(y_test, y_pred)\nprint(class_report)\n\n\n\n\n\n              precision    recall  f1-score   support\n\n           0       0.82      0.86      0.84       105\n           1       0.78      0.73      0.76        74\n\n    accuracy                           0.80       179\n   macro avg       0.80      0.79      0.80       179\nweighted avg       0.80      0.80      0.80       179"
   },
   {
-    "objectID": "posts/welcome/index.html#step6-testing-accuracy",
-    "href": "posts/welcome/index.html#step6-testing-accuracy",
+    "objectID": "posts/clustering/index.html#step-1---importing-the-dataset",
+    "href": "posts/clustering/index.html#step-1---importing-the-dataset",
     "title": "Clustering",
+    "section": "Step 1 - Importing the Dataset",
+    "text": "Step 1 - Importing the Dataset\nFor this example, I’ll choose the “Wholesale customers data” dataset, which is also popular for clustering tasks. This dataset includes various features like Fresh, Milk, Grocery, Frozen, Detergents_Paper, and Delicatessen, representing annual spending in monetary units.\n\n\nCode\nimport pandas as pd\n\n# Loading the dataset\n# Note: Ensure you have downloaded the dataset from Kaggle beforehand\ndataset = pd.read_csv('Wholesale customers data.csv')\nprint(dataset.head())\n\n\n   Channel  Region  Fresh  Milk  Grocery  Frozen  Detergents_Paper  Delicassen\n0        2       3  12669  9656     7561     214              2674        1338\n1        2       3   7057  9810     9568    1762              3293        1776\n2        2       3   6353  8808     7684    2405              3516        7844\n3        1       3  13265  1196     4221    6404               507        1788\n4        2       3  22615  5410     7198    3915              1777        5185"
+  },
+  {
+    "objectID": "posts/clustering/index.html#step-2-data-pre-processing",
+    "href": "posts/clustering/index.html#step-2-data-pre-processing",
+    "title": "Clustering",
+    "section": "Step 2: Data Pre-processing",
+    "text": "Step 2: Data Pre-processing\n\n\nCode\nfrom sklearn.preprocessing import StandardScaler\n\n# Optional: Dropping non-essential features, if any\n# dataset = dataset.drop(['Feature_to_drop'], axis=1)\n\n# Feature scaling\nscaler = StandardScaler()\nscaled_data = scaler.fit_transform(dataset)"
+  },
+  {
+    "objectID": "posts/clustering/index.html#step-3-applying-the-meanshift-algorithm",
+    "href": "posts/clustering/index.html#step-3-applying-the-meanshift-algorithm",
+    "title": "Clustering",
+    "section": "Step 3: Applying the MeanShift Algorithm",
+    "text": "Step 3: Applying the MeanShift Algorithm\n\n\nCode\nfrom sklearn.cluster import MeanShift\n\n# Applying MeanShift algorithm\nmeanshift = MeanShift(bandwidth=2)\nmeanshift.fit(scaled_data)\n\n\nMeanShift(bandwidth=2)In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.MeanShiftMeanShift(bandwidth=2)\n\n\nAutomatic Detection of the Number of Clusters: Unlike many clustering algorithms like K-Means, MeanShift does not require the number of clusters to be specified beforehand. Instead, it automatically determines the number of clusters based on the data distribution and the bandwidth. This property is particularly useful when the number of clusters is not known a priori, or when the data might contain complex structures that aren’t well-suited to a predetermined number of clusters. In summary, MeanShift is a powerful clustering algorithm, especially useful in situations where the number of clusters is unknown or complex data structures are present. The choice of the bandwidth parameter is crucial and can significantly affect the outcome of the clustering process. Experimentation or methods like cross-validation might be required to find the optimal bandwidth for a given dataset.\nSignificance of Bandwidth: Role of Bandwidth: The bandwidth parameter is crucial in MeanShift and determines the size of the kernel or window that dictates which points are considered neighbors. Essentially, it sets the radius of the area within which points influence the computation of the mean.\nInfluence on Clusters:\nSmall Bandwidth: A smaller bandwidth leads to smaller kernels, considering fewer points as neighbors. This can result in detecting more clusters, with the possibility of overfitting and creating many small clusters. Large Bandwidth: A larger bandwidth includes more points in each kernel, potentially smoothing over local variations. This can result in fewer, larger clusters, but might miss finer details or subclusters in the data."
+  },
+  {
+    "objectID": "posts/clustering/index.html#step-4-analyzing-the-clusters",
+    "href": "posts/clustering/index.html#step-4-analyzing-the-clusters",
+    "title": "Clustering",
+    "section": "Step 4: Analyzing the Clusters:",
+    "text": "Step 4: Analyzing the Clusters:\n\n\nCode\n# Extracting the cluster centers and labels\ncluster_centers = meanshift.cluster_centers_\nlabels = meanshift.labels_\n\n# Adding cluster information to the dataset\ndataset['Cluster'] = labels"
+  },
+  {
+    "objectID": "posts/clustering/index.html#step-5-visualizing-the-clusters",
+    "href": "posts/clustering/index.html#step-5-visualizing-the-clusters",
+    "title": "Clustering",
+    "section": "Step 5: Visualizing the Clusters",
+    "text": "Step 5: Visualizing the Clusters\nUse a pairplot to visualize relationships between different features, colored by clusters. Employ a heatmap to display the cluster centers, providing insights into the average behavior of each cluster.\n\n\nCode\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n# Pairplot for different features colored by clusters\nsns.pairplot(dataset, hue='Cluster', palette='viridis')\nplt.title('Pairplot of Features by Cluster')\nplt.show()\n\n# Heatmap of the cluster centers\nsns.heatmap(cluster_centers, annot=True, cmap='viridis')\nplt.title('Heatmap of Cluster Centers')\nplt.show()"
+  },
+  {
+    "objectID": "posts/clustering/index.html#step-6-testing-accuracy",
+    "href": "posts/clustering/index.html#step-6-testing-accuracy",
+    "title": "Clustering",
+    "section": "Step 6: Testing accuracy:",
+    "text": "Step 6: Testing accuracy:\n\n\nCode\n# Compute the silhouette score\nfrom sklearn.metrics import silhouette_score\nfrom sklearn.metrics import calinski_harabasz_score\n\nlabels = meanshift.labels_\nsilhouette_avg = silhouette_score(scaled_data, labels)\nprint(f\"Silhouette Score: {silhouette_avg}\")\n\n# Assuming 'scaled_data' is your scaled dataset and 'labels' are the output of MeanShift\nch_score = calinski_harabasz_score(scaled_data, labels)\nprint(f\"Calinski-Harabasz Index: {ch_score}\")\n\n\nSilhouette Score: 0.2962304350024522\nCalinski-Harabasz Index: 58.188844470257834\n\n\n2D Scatter Plot with PCA: This will provide a visual representation of how the data points are clustered in a two-dimensional space.\n\n\nCode\nimport matplotlib.pyplot as plt\nfrom sklearn.decomposition import PCA\n\n# Reducing data to 2 dimensions using PCA\npca = PCA(n_components=2)\nreduced_data_2D = pca.fit_transform(scaled_data)\n\n# Plotting 2D scatter plot\nplt.figure(figsize=(8, 6))\nplt.scatter(reduced_data_2D[:, 0], reduced_data_2D[:, 1], c=labels, cmap='viridis', marker='o')\nplt.title('2D Scatter Plot of Clusters')\nplt.xlabel('Principal Component 1')\nplt.ylabel('Principal Component 2')\nplt.colorbar()\nplt.show()\n\n\n\n\n\n\n\nCode\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom pandas.plotting import parallel_coordinates\n\n# Assuming 'dataset' is your original DataFrame and 'labels' are the cluster labels from MeanShift\ndata_with_clusters = dataset.copy()\ndata_with_clusters['Cluster'] = labels\n\n# Parallel Coordinates Plot\nplt.figure(figsize=(12, 6))\nparallel_coordinates(data_with_clusters, 'Cluster', colormap='viridis')\nplt.title('Parallel Coordinates Plot of Clusters')\nplt.xlabel('Features')\nplt.ylabel('Values')\nplt.show()"
+  },
+  {
+    "objectID": "posts/Anomaly/index.html#step-1-importing-the-dataset",
+    "href": "posts/Anomaly/index.html#step-1-importing-the-dataset",
+    "title": "Anomaly/outlier detection",
+    "section": "Step 1: Importing the Dataset",
+    "text": "Step 1: Importing the Dataset\nThe Glass Identification Dataset is a dataset containing information about different types of glass. We can import it from the ODDS platform using the pandas library.\n\n\nCode\nimport scipy.io\nimport pandas as pd\n\n# Load the .mat file\nmat_file_path = 'glass.mat'  # Replace with the actual path\nmat_data = scipy.io.loadmat(mat_file_path)\n\n# Extract 'X' and 'y' from the .mat file\nX = mat_data['X']\ny = mat_data['y']\n\n# Displaying the first few rows of 'X' and 'y' for step 1\npd.DataFrame(X, columns=[f\"Feature_{i+1}\" for i in range(X.shape[1])]).head(), pd.DataFrame(y, columns=['Target']).head()\n\n\n(   Feature_1  Feature_2  Feature_3  Feature_4  Feature_5  Feature_6  \\\n 0    1.52101      13.64       4.49       1.10      71.78       0.06   \n 1    1.51761      13.89       3.60       1.36      72.73       0.48   \n 2    1.51618      13.53       3.55       1.54      72.99       0.39   \n 3    1.51766      13.21       3.69       1.29      72.61       0.57   \n 4    1.51742      13.27       3.62       1.24      73.08       0.55   \n \n    Feature_7  Feature_8  Feature_9  \n 0       8.75        0.0        0.0  \n 1       7.83        0.0        0.0  \n 2       7.78        0.0        0.0  \n 3       8.22        0.0        0.0  \n 4       8.07        0.0        0.0  ,\n    Target\n 0     0.0\n 1     0.0\n 2     0.0\n 3     0.0\n 4     0.0)"
+  },
+  {
+    "objectID": "posts/Anomaly/index.html#step-2-data-pre-processing",
+    "href": "posts/Anomaly/index.html#step-2-data-pre-processing",
+    "title": "Anomaly/outlier detection",
+    "section": "Step 2: Data Pre-processing",
+    "text": "Step 2: Data Pre-processing\nIn this step, we handle missing values and prepare the data for the model. This may include filling missing values, encoding categorical variables, and scaling features.\n\n\nCode\nfrom sklearn.preprocessing import MinMaxScaler\n\n# Convert 'X' and 'y' into pandas DataFrames\ndf_X = pd.DataFrame(X)\ndf_y = pd.DataFrame(y)\n\n# Check for missing values\nmissing_values = df_X.isnull().sum().sum() + df_y.isnull().sum().sum()\n\n# Normalize the feature data\nscaler = MinMaxScaler()\ndf_X_scaled = scaler.fit_transform(df_X)"
+  },
+  {
+    "objectID": "posts/Anomaly/index.html#step-3-splitting-the-test-and-train-sets",
+    "href": "posts/Anomaly/index.html#step-3-splitting-the-test-and-train-sets",
+    "title": "Anomaly/outlier detection",
+    "section": "Step 3: Splitting the Test and Train Sets",
+    "text": "Step 3: Splitting the Test and Train Sets\nWe divide the dataset into training and testing sets.\n\n\nCode\nfrom sklearn.model_selection import train_test_split\n\n# Split the dataset into training and test sets\nX_train, X_test, y_train, y_test = train_test_split(df_X_scaled, df_y, test_size=0.2, random_state=42)"
+  },
+  {
+    "objectID": "posts/Anomaly/index.html#step-4-fitting-the-model-to-the-training-set",
+    "href": "posts/Anomaly/index.html#step-4-fitting-the-model-to-the-training-set",
+    "title": "Anomaly/outlier detection",
+    "section": "Step 4: Fitting the Model to the Training Set",
+    "text": "Step 4: Fitting the Model to the Training Set\nWe use the Isolation Forest model for anomaly detection. The Isolation Forest method is a popular algorithm used for anomaly detection. The Isolation Forest isolates observations by randomly selecting a feature and then randomly selecting a split value between the maximum and minimum values of the selected feature.\n\n\nCode\nfrom sklearn.ensemble import IsolationForest\n\n# Fit the Isolation Forest model to the training set\niso_forest = IsolationForest(contamination=0.1, random_state=42)\niso_forest.fit(X_train)\n\n\nIsolationForest(contamination=0.1, random_state=42)In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.IsolationForestIsolationForest(contamination=0.1, random_state=42)"
+  },
+  {
+    "objectID": "posts/Anomaly/index.html#step-5-predicting-test-results",
+    "href": "posts/Anomaly/index.html#step-5-predicting-test-results",
+    "title": "Anomaly/outlier detection",
+    "section": "Step 5: Predicting Test Results",
+    "text": "Step 5: Predicting Test Results\nNow that our model is trained, we can use it to predict anomalies in the test set.\n\n\nCode\n# Predict anomalies in the test set\npredictions = iso_forest.predict(X_test)\n\n# Add predictions to the test set for visualization\nX_test_with_predictions = pd.DataFrame(X_test).copy()\nX_test_with_predictions['Anomaly'] = predictions"
+  },
+  {
+    "objectID": "posts/Anomaly/index.html#step-6-visualizing-the-test-results",
+    "href": "posts/Anomaly/index.html#step-6-visualizing-the-test-results",
+    "title": "Anomaly/outlier detection",
+    "section": "Step 6: Visualizing the Test Results",
+    "text": "Step 6: Visualizing the Test Results\nTo visualize the results of our anomaly detection model, we can create a scatter plot to show the anomalies in the test data.\n\n\nCode\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n# Selecting two features for the scatter plot\nfeature_1_index = 0  # First feature\nfeature_2_index = 1  # Second feature\n\n# Create the scatter plot\nplt.figure(figsize=(10, 6))\nsns.scatterplot(x=X_test_with_predictions.iloc[:, feature_1_index], \n                y=X_test_with_predictions.iloc[:, feature_2_index], \n                hue=X_test_with_predictions['Anomaly'], \n                palette=['red', 'green'], alpha=0.7)\nplt.title('Scatter Plot of Test Data: Feature 1 vs Feature 2')\nplt.xlabel('Feature 1')\nplt.ylabel('Feature 2')\nplt.legend(title='Anomaly', labels=['Outlier', 'Inlier'])\nplt.show()"
+  },
+  {
+    "objectID": "posts/Anomaly/index.html#testing-the-accuracy",
+    "href": "posts/Anomaly/index.html#testing-the-accuracy",
+    "title": "Anomaly/outlier detection",
+    "section": "Testing the accuracy",
+    "text": "Testing the accuracy\n\n\nCode\nfrom sklearn.metrics import accuracy_score\n\n# Converting the anomaly predictions from [-1, 1] to [0, 1], where -1 (anomaly) becomes 1 and 1 (normal) becomes 0\n# This is to align with the target variable's encoding where we assume 1 represents anomaly and 0 represents normal\npredicted_labels = (predictions == -1).astype(int)\n\n# Calculating the accuracy\naccuracy = accuracy_score(y_test, predicted_labels)\naccuracy\n\n\n0.9069767441860465"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "Code\n# Compute the silhouette score\nfrom sklearn.metrics import silhouette_score\nfrom sklearn.metrics import calinski_harabasz_score\n\nlabels = meanshift.labels_\nsilhouette_avg = silhouette_score(scaled_data, labels)\nprint(f\"Silhouette Score: {silhouette_avg}\")\n\n# Assuming 'scaled_data' is your scaled dataset and 'labels' are the output of MeanShift\nch_score = calinski_harabasz_score(scaled_data, labels)\nprint(f\"Calinski-Harabasz Index: {ch_score}\")\n\n\nSilhouette Score: 0.2962304350024522\nCalinski-Harabasz Index: 58.188844470257834\n\n\n2D Scatter Plot with PCA: This will provide a visual representation of how the data points are clustered in a two-dimensional space.\n\n\nCode\nimport matplotlib.pyplot as plt\nfrom sklearn.decomposition import PCA\n\n# Reducing data to 2 dimensions using PCA\npca = PCA(n_components=2)\nreduced_data_2D = pca.fit_transform(scaled_data)\n\n# Plotting 2D scatter plot\nplt.figure(figsize=(8, 6))\nplt.scatter(reduced_data_2D[:, 0], reduced_data_2D[:, 1], c=labels, cmap='viridis', marker='o')\nplt.title('2D Scatter Plot of Clusters')\nplt.xlabel('Principal Component 1')\nplt.ylabel('Principal Component 2')\nplt.colorbar()\nplt.show()\n\n\n\n\n\n\n\nCode\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom pandas.plotting import parallel_coordinates\n\n# Assuming 'dataset' is your original DataFrame and 'labels' are the cluster labels from MeanShift\ndata_with_clusters = dataset.copy()\ndata_with_clusters['Cluster'] = labels\n\n# Parallel Coordinates Plot\nplt.figure(figsize=(12, 6))\nparallel_coordinates(data_with_clusters, 'Cluster', colormap='viridis')\nplt.title('Parallel Coordinates Plot of Clusters')\nplt.xlabel('Features')\nplt.ylabel('Values')\nplt.show()"
+    "text": "This is the Machine learning blog for the course CS5805.\n\nCreated by:\nAdithya Harish Srinivasan Manikandan – Ms cs"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ML 5805 Blog",
+    "section": "",
+    "text": "Anomaly/outlier detection\n\n\n\n\n\n\n\n\n\n\n\n\nAdithya Harish\n\n\n\n\n\n\n  \n\n\n\n\nClassification\n\n\n\n\n\n\n\n\n\n\n\n\nAdithya Harish\n\n\n\n\n\n\n  \n\n\n\n\nClustering\n\n\n\n\n\n\n\n\n\n\n\n\nAdithya Harish\n\n\n\n\n\n\n  \n\n\n\n\nLinear and Non-Linear Regression\n\n\n\n\n\n\n\n\n\n\n\n\nAdithya Harish\n\n\n\n\n\n\n  \n\n\n\n\nProbability Theory and Random Variables\n\n\n\n\n\n\n\n\n\n\n\n\nAdithya Harish\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/classification/index.html",
@@ -112,78 +210,8 @@
     "text": "Code\nprint(\"Accuracy:\", accuracy_score(y_test, y_pred))\n\n\nAccuracy: 0.903125"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "ML 5805 Blog",
-    "section": "",
-    "text": "Anomaly/outlier detection\n\n\n\n\n\n\n\n\n\n\n\n\nAdithya Harish\n\n\n\n\n\n\n  \n\n\n\n\nClassification\n\n\n\n\n\n\n\n\n\n\n\n\nAdithya Harish\n\n\n\n\n\n\n  \n\n\n\n\nLinear and Non-Linear Regression\n\n\n\n\n\n\n\n\n\n\n\n\nAdithya Harish\n\n\n\n\n\n\n  \n\n\n\n\nClustering\n\n\n\n\n\n\n\n\n\n\n\n\nAdithya Harish\n\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "This is the Machine learning blog for the course CS5805. Created by: Adithya Harish Srinivasan Manikandan Ms cs"
-  },
-  {
-    "objectID": "posts/Anomaly/index.html",
-    "href": "posts/Anomaly/index.html",
-    "title": "Anomaly/outlier detection",
-    "section": "",
-    "text": "Anomaly or outlier detection in machine learning refers to the identification of rare items, events, or observations which raise suspicions by differing significantly from the majority of the data. Typically, these anomalies represent issues such as errors, frauds, faults, or significant deviations from the norm. In the context of machine learning, anomaly detection is applied across various domains like fraud detection in banking, intrusion detection in network security, fault detection in manufacturing, and medical diagnosis.\nThe process involves training a model to identify the patterns of normal data and subsequently detect data points that deviate from this normal pattern.\n\n\nThe Glass Identification Dataset is a dataset containing information about different types of glass. We can import it from the ODDS platform using the pandas library.\n\n\nCode\nimport scipy.io\nimport pandas as pd\n\n# Load the .mat file\nmat_file_path = 'glass.mat'  # Replace with the actual path\nmat_data = scipy.io.loadmat(mat_file_path)\n\n# Extract 'X' and 'y' from the .mat file\nX = mat_data['X']\ny = mat_data['y']\n\n# Displaying the first few rows of 'X' and 'y' for step 1\npd.DataFrame(X, columns=[f\"Feature_{i+1}\" for i in range(X.shape[1])]).head(), pd.DataFrame(y, columns=['Target']).head()\n\n\n(   Feature_1  Feature_2  Feature_3  Feature_4  Feature_5  Feature_6  \\\n 0    1.52101      13.64       4.49       1.10      71.78       0.06   \n 1    1.51761      13.89       3.60       1.36      72.73       0.48   \n 2    1.51618      13.53       3.55       1.54      72.99       0.39   \n 3    1.51766      13.21       3.69       1.29      72.61       0.57   \n 4    1.51742      13.27       3.62       1.24      73.08       0.55   \n \n    Feature_7  Feature_8  Feature_9  \n 0       8.75        0.0        0.0  \n 1       7.83        0.0        0.0  \n 2       7.78        0.0        0.0  \n 3       8.22        0.0        0.0  \n 4       8.07        0.0        0.0  ,\n    Target\n 0     0.0\n 1     0.0\n 2     0.0\n 3     0.0\n 4     0.0)\n\n\n\n\n\nIn this step, we handle missing values and prepare the data for the model. This may include filling missing values, encoding categorical variables, and scaling features.\n\n\nCode\nfrom sklearn.preprocessing import MinMaxScaler\n\n# Convert 'X' and 'y' into pandas DataFrames\ndf_X = pd.DataFrame(X)\ndf_y = pd.DataFrame(y)\n\n# Check for missing values\nmissing_values = df_X.isnull().sum().sum() + df_y.isnull().sum().sum()\n\n# Normalize the feature data\nscaler = MinMaxScaler()\ndf_X_scaled = scaler.fit_transform(df_X)\n\n\n\n\n\nWe divide the dataset into training and testing sets.\n\n\nCode\nfrom sklearn.model_selection import train_test_split\n\n# Split the dataset into training and test sets\nX_train, X_test, y_train, y_test = train_test_split(df_X_scaled, df_y, test_size=0.2, random_state=42)\n\n\n\n\n\nWe use the Isolation Forest model for anomaly detection. The Isolation Forest method is a popular algorithm used for anomaly detection. The Isolation Forest isolates observations by randomly selecting a feature and then randomly selecting a split value between the maximum and minimum values of the selected feature.\n\n\nCode\nfrom sklearn.ensemble import IsolationForest\n\n# Fit the Isolation Forest model to the training set\niso_forest = IsolationForest(contamination=0.1, random_state=42)\niso_forest.fit(X_train)\n\n\nIsolationForest(contamination=0.1, random_state=42)In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.IsolationForestIsolationForest(contamination=0.1, random_state=42)\n\n\n\n\n\nNow that our model is trained, we can use it to predict anomalies in the test set.\n\n\nCode\n# Predict anomalies in the test set\npredictions = iso_forest.predict(X_test)\n\n# Add predictions to the test set for visualization\nX_test_with_predictions = pd.DataFrame(X_test).copy()\nX_test_with_predictions['Anomaly'] = predictions\n\n\n\n\n\nTo visualize the results of our anomaly detection model, we can create a scatter plot to show the anomalies in the test data.\n\n\nCode\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n# Selecting two features for the scatter plot\nfeature_1_index = 0  # First feature\nfeature_2_index = 1  # Second feature\n\n# Create the scatter plot\nplt.figure(figsize=(10, 6))\nsns.scatterplot(x=X_test_with_predictions.iloc[:, feature_1_index], \n                y=X_test_with_predictions.iloc[:, feature_2_index], \n                hue=X_test_with_predictions['Anomaly'], \n                palette=['red', 'green'], alpha=0.7)\nplt.title('Scatter Plot of Test Data: Feature 1 vs Feature 2')\nplt.xlabel('Feature 1')\nplt.ylabel('Feature 2')\nplt.legend(title='Anomaly', labels=['Outlier', 'Inlier'])\nplt.show()\n\n\n\n\n\n\n\n\n\n\nCode\nfrom sklearn.metrics import accuracy_score\n\n# Converting the anomaly predictions from [-1, 1] to [0, 1], where -1 (anomaly) becomes 1 and 1 (normal) becomes 0\n# This is to align with the target variable's encoding where we assume 1 represents anomaly and 0 represents normal\npredicted_labels = (predictions == -1).astype(int)\n\n# Calculating the accuracy\naccuracy = accuracy_score(y_test, predicted_labels)\naccuracy\n\n\n0.9069767441860465"
-  },
-  {
-    "objectID": "posts/Anomaly/index.html#step-1-importing-the-dataset",
-    "href": "posts/Anomaly/index.html#step-1-importing-the-dataset",
-    "title": "Anomaly/outlier detection",
-    "section": "",
-    "text": "The Glass Identification Dataset is a dataset containing information about different types of glass. We can import it from the ODDS platform using the pandas library.\n\n\nCode\nimport scipy.io\nimport pandas as pd\n\n# Load the .mat file\nmat_file_path = 'glass.mat'  # Replace with the actual path\nmat_data = scipy.io.loadmat(mat_file_path)\n\n# Extract 'X' and 'y' from the .mat file\nX = mat_data['X']\ny = mat_data['y']\n\n# Displaying the first few rows of 'X' and 'y' for step 1\npd.DataFrame(X, columns=[f\"Feature_{i+1}\" for i in range(X.shape[1])]).head(), pd.DataFrame(y, columns=['Target']).head()\n\n\n(   Feature_1  Feature_2  Feature_3  Feature_4  Feature_5  Feature_6  \\\n 0    1.52101      13.64       4.49       1.10      71.78       0.06   \n 1    1.51761      13.89       3.60       1.36      72.73       0.48   \n 2    1.51618      13.53       3.55       1.54      72.99       0.39   \n 3    1.51766      13.21       3.69       1.29      72.61       0.57   \n 4    1.51742      13.27       3.62       1.24      73.08       0.55   \n \n    Feature_7  Feature_8  Feature_9  \n 0       8.75        0.0        0.0  \n 1       7.83        0.0        0.0  \n 2       7.78        0.0        0.0  \n 3       8.22        0.0        0.0  \n 4       8.07        0.0        0.0  ,\n    Target\n 0     0.0\n 1     0.0\n 2     0.0\n 3     0.0\n 4     0.0)"
-  },
-  {
-    "objectID": "posts/Anomaly/index.html#step-2-data-pre-processing",
-    "href": "posts/Anomaly/index.html#step-2-data-pre-processing",
-    "title": "Anomaly/outlier detection",
-    "section": "",
-    "text": "In this step, we handle missing values and prepare the data for the model. This may include filling missing values, encoding categorical variables, and scaling features.\n\n\nCode\nfrom sklearn.preprocessing import MinMaxScaler\n\n# Convert 'X' and 'y' into pandas DataFrames\ndf_X = pd.DataFrame(X)\ndf_y = pd.DataFrame(y)\n\n# Check for missing values\nmissing_values = df_X.isnull().sum().sum() + df_y.isnull().sum().sum()\n\n# Normalize the feature data\nscaler = MinMaxScaler()\ndf_X_scaled = scaler.fit_transform(df_X)"
-  },
-  {
-    "objectID": "posts/Anomaly/index.html#step-3-splitting-the-test-and-train-sets",
-    "href": "posts/Anomaly/index.html#step-3-splitting-the-test-and-train-sets",
-    "title": "Anomaly/outlier detection",
-    "section": "",
-    "text": "We divide the dataset into training and testing sets.\n\n\nCode\nfrom sklearn.model_selection import train_test_split\n\n# Split the dataset into training and test sets\nX_train, X_test, y_train, y_test = train_test_split(df_X_scaled, df_y, test_size=0.2, random_state=42)"
-  },
-  {
-    "objectID": "posts/Anomaly/index.html#step-4-fitting-the-model-to-the-training-set",
-    "href": "posts/Anomaly/index.html#step-4-fitting-the-model-to-the-training-set",
-    "title": "Anomaly/outlier detection",
-    "section": "",
-    "text": "We use the Isolation Forest model for anomaly detection. The Isolation Forest method is a popular algorithm used for anomaly detection. The Isolation Forest isolates observations by randomly selecting a feature and then randomly selecting a split value between the maximum and minimum values of the selected feature.\n\n\nCode\nfrom sklearn.ensemble import IsolationForest\n\n# Fit the Isolation Forest model to the training set\niso_forest = IsolationForest(contamination=0.1, random_state=42)\niso_forest.fit(X_train)\n\n\nIsolationForest(contamination=0.1, random_state=42)In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.IsolationForestIsolationForest(contamination=0.1, random_state=42)"
-  },
-  {
-    "objectID": "posts/Anomaly/index.html#step-5-predicting-test-results",
-    "href": "posts/Anomaly/index.html#step-5-predicting-test-results",
-    "title": "Anomaly/outlier detection",
-    "section": "",
-    "text": "Now that our model is trained, we can use it to predict anomalies in the test set.\n\n\nCode\n# Predict anomalies in the test set\npredictions = iso_forest.predict(X_test)\n\n# Add predictions to the test set for visualization\nX_test_with_predictions = pd.DataFrame(X_test).copy()\nX_test_with_predictions['Anomaly'] = predictions"
-  },
-  {
-    "objectID": "posts/Anomaly/index.html#step-6-visualizing-the-test-results",
-    "href": "posts/Anomaly/index.html#step-6-visualizing-the-test-results",
-    "title": "Anomaly/outlier detection",
-    "section": "",
-    "text": "To visualize the results of our anomaly detection model, we can create a scatter plot to show the anomalies in the test data.\n\n\nCode\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\n# Selecting two features for the scatter plot\nfeature_1_index = 0  # First feature\nfeature_2_index = 1  # Second feature\n\n# Create the scatter plot\nplt.figure(figsize=(10, 6))\nsns.scatterplot(x=X_test_with_predictions.iloc[:, feature_1_index], \n                y=X_test_with_predictions.iloc[:, feature_2_index], \n                hue=X_test_with_predictions['Anomaly'], \n                palette=['red', 'green'], alpha=0.7)\nplt.title('Scatter Plot of Test Data: Feature 1 vs Feature 2')\nplt.xlabel('Feature 1')\nplt.ylabel('Feature 2')\nplt.legend(title='Anomaly', labels=['Outlier', 'Inlier'])\nplt.show()"
-  },
-  {
-    "objectID": "posts/Anomaly/index.html#testing-the-accuracy",
-    "href": "posts/Anomaly/index.html#testing-the-accuracy",
-    "title": "Anomaly/outlier detection",
-    "section": "",
-    "text": "Code\nfrom sklearn.metrics import accuracy_score\n\n# Converting the anomaly predictions from [-1, 1] to [0, 1], where -1 (anomaly) becomes 1 and 1 (normal) becomes 0\n# This is to align with the target variable's encoding where we assume 1 represents anomaly and 0 represents normal\npredicted_labels = (predictions == -1).astype(int)\n\n# Calculating the accuracy\naccuracy = accuracy_score(y_test, predicted_labels)\naccuracy\n\n\n0.9069767441860465"
-  },
-  {
-    "objectID": "posts/post-with-code/index.html",
-    "href": "posts/post-with-code/index.html",
+    "objectID": "posts/linear-regression/index.html",
+    "href": "posts/linear-regression/index.html",
     "title": "Linear and Non-Linear Regression",
     "section": "",
     "text": "Linear Regression Linear regression is a fundamental and widely used statistical and machine learning technique for modeling the relationship between a dependent variable (also called the target) and one or more independent variables (also called features or predictors). In Python, you can perform linear regression using various libraries, such as scikit-learn, NumPy, or TensorFlow. Here, I’ll describe how to do it with scikit-learn, a popular machine learning library in Python:\n\nStep 1 - Importing the Dataset\nLet’s use the “House Prices” dataset from the popular Kaggle competition “House Prices: Advanced Regression Techniques.” This dataset contains various features related to residential houses and their sale prices. I have used the train.csv.\n\n\nCode\n# Import necessary libraries\nimport pandas as pd\n\n# Load the dataset\ndata = pd.read_csv('train.csv')\n\n# Explore the dataset\ndata.head()\n\n\n\n\n\n\n\n\n\nId\nMSSubClass\nMSZoning\nLotFrontage\nLotArea\nStreet\nAlley\nLotShape\nLandContour\nUtilities\n...\nPoolArea\nPoolQC\nFence\nMiscFeature\nMiscVal\nMoSold\nYrSold\nSaleType\nSaleCondition\nSalePrice\n\n\n\n\n0\n1\n60\nRL\n65.0\n8450\nPave\nNaN\nReg\nLvl\nAllPub\n...\n0\nNaN\nNaN\nNaN\n0\n2\n2008\nWD\nNormal\n208500\n\n\n1\n2\n20\nRL\n80.0\n9600\nPave\nNaN\nReg\nLvl\nAllPub\n...\n0\nNaN\nNaN\nNaN\n0\n5\n2007\nWD\nNormal\n181500\n\n\n2\n3\n60\nRL\n68.0\n11250\nPave\nNaN\nIR1\nLvl\nAllPub\n...\n0\nNaN\nNaN\nNaN\n0\n9\n2008\nWD\nNormal\n223500\n\n\n3\n4\n70\nRL\n60.0\n9550\nPave\nNaN\nIR1\nLvl\nAllPub\n...\n0\nNaN\nNaN\nNaN\n0\n2\n2006\nWD\nAbnorml\n140000\n\n\n4\n5\n60\nRL\n84.0\n14260\nPave\nNaN\nIR1\nLvl\nAllPub\n...\n0\nNaN\nNaN\nNaN\n0\n12\n2008\nWD\nNormal\n250000\n\n\n\n\n5 rows × 81 columns\n\n\n\n\n\nStep 2: Data Pre-processing\nPerform data pre-processing tasks like handling missing values, encoding categorical variables, and scaling features if necessary.\n\n\nCode\nprint(data.isnull().sum())\n\n# Handle missing values (if necessary)\ndata['LotFrontage'].fillna(data['LotFrontage'].mean(), inplace=True)\n\n# Encode categorical variables (if necessary)\ndata = pd.get_dummies(data, columns=['MSZoning', 'Street'])\n\n# Scale features (if necessary)\nfrom sklearn.preprocessing import StandardScaler\nscaler = StandardScaler()\ndata[['GrLivArea']] = scaler.fit_transform(data[['GrLivArea']])\n\n\nId                 0\nMSSubClass         0\nMSZoning           0\nLotFrontage      259\nLotArea            0\n                ... \nMoSold             0\nYrSold             0\nSaleType           0\nSaleCondition      0\nSalePrice          0\nLength: 81, dtype: int64\n\n\n\n\nStep 3: Splitting the Test and Train Sets\nSplit the dataset into a training set and a test set for model evaluation.\n\n\nCode\nfrom sklearn.model_selection import train_test_split\n\nX = data[['OverallQual', 'YearBuilt', 'GrLivArea']]  # Select relevant features\ny = data['SalePrice']  # Define the target variable\n\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\n#Fitting the Linear Regression Model to the Training Set\n\n\n\n\nStep 4: Fitting the Linear Regression Model\nBuild and train the linear regression model using the training set.\n\n\nCode\nfrom sklearn.linear_model import LinearRegression\nimport matplotlib.pyplot as plt\nfrom sklearn.metrics import mean_squared_error, r2_score\n\nmodel = LinearRegression() # Create a linear regression model\n\nmodel.fit(X_train, y_train) # Fit the model to the training data\n\n\nLinearRegression()In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.LinearRegressionLinearRegression()\n\n\n\n\nStep 5: Predicting Test Results\nMake predictions on the test set.\n\n\nCode\ny_pred = model.predict(X_test)\n\n\n\n\nStep 6: Visualizing the Test Results\nVisualize the model’s performance by comparing the actual and predicted values.\n\n\nCode\nplt.scatter(y_test, y_pred) # Scatter plot to visualize actual vs. predicted values\n\nplt.xlabel(\"Actual Sale Prices\")\nplt.ylabel(\"Predicted Sale Prices\")\nplt.title(\"Actual Sale Prices vs. Predicted Sale Prices\")\nplt.show()\n\n\n\n\n\n\n\nStep 7 - Test Accuracy\nTo test the accuracy of the linear regression model that was built using the provided code, you can calculate common regression evaluation metrics. Two common metrics are Mean Squared Error (MSE) and R-squared (R²). You can use libraries like scikit-learn to calculate these metrics.\nHere’s how to test the accuracy and print the MSE and R² for your linear regression model:\n\n\nCode\n# Make predictions on the test set\ny_pred = model.predict(X_test)\n\n# Calculate Mean Squared Error (MSE)\nmse = mean_squared_error(y_test, y_pred)\n\n# Calculate R-squared (R²) score\nr2 = r2_score(y_test, y_pred)\n\nprint(f\"Mean Squared Error (MSE): {mse:.2f}\")\nprint(f\"R-squared (R²) Score: {r2:.2f}\")\n\n\nMean Squared Error (MSE): 1865108216.81\nR-squared (R²) Score: 0.76"

@@ -4,8 +4,9 @@
     "items": [
       "/posts/Anomaly/index.html",
       "/posts/classification/index.html",
-      "/posts/post-with-code/index.html",
-      "/posts/welcome/index.html"
+      "/posts/clustering/index.html",
+      "/posts/linear-regression/index.html",
+      "/posts/probability-theory/index1.html"
     ]
   }
 ]

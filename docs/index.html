@@ -71,9 +71,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -119,7 +119,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/adithyaharish/ML-blog-CS5805" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -133,7 +133,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
+    <div class="quarto-title column-page">
       <h1 class="title">ML 5805 Blog</h1>
                       </div>
   </div>
@@ -150,11 +150,9 @@ ul.task-list li input[type="checkbox"] {
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(4)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
 
 
 
@@ -165,9 +163,9 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1700189280924" data-listing-reading-time-sort="3">
+<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1701398244538" data-listing-reading-time-sort="3">
 <div class="thumbnail">
-<p><a href="./posts/Anomaly/index.html"> <p class="card-img-top"><img src="posts\Anomaly\index_files\figure-html\cell-7-output-1.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/Anomaly/index.html"> <img src="./posts/Anomaly/anomaly.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/Anomaly/index.html">
@@ -190,9 +188,9 @@ Adithya Harish
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1700617618680" data-listing-reading-time-sort="2">
+<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1701398282484" data-listing-reading-time-sort="2">
 <div class="thumbnail">
-<p><a href="./posts/classification/index.html"> <p class="card-img-top"><img src="posts\classification\index_files\figure-html\cell-6-output-1.png"  class="thumbnail-image card-img"/></p> </a></p>
+<p><a href="./posts/classification/index.html"> <img src="./posts/classification/classification.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
 <a href="./posts/classification/index.html">
@@ -215,37 +213,12 @@ Adithya Harish
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1699210839639" data-listing-reading-time-sort="3">
+<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1701398307018" data-listing-reading-time-sort="4">
 <div class="thumbnail">
-<p><a href="./posts/post-with-code/index.html"> <img src="./posts/post-with-code/image.jpg" class="thumbnail-image"> </a></p>
+<p><a href="./posts/clustering/index.html"> <img src="./posts/clustering/clustering.png" class="thumbnail-image"> </a></p>
 </div>
 <div class="body">
-<a href="./posts/post-with-code/index.html">
-<h3 class="no-anchor listing-title">
-Linear and Non-Linear Regression
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-<strong>Linear Regression</strong> Linear regression is a fundamental and widely used statistical and machine learning technique for modeling the relationship between a dependent variable (also called the…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/post-with-code/index.html">
-<div class="listing-author">
-Adithya Harish
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1700079263731" data-listing-reading-time-sort="4">
-<div class="thumbnail">
-<p><a href="./posts/welcome/index.html"> <p class="card-img-top"><img src="posts\welcome\index_files\figure-html\cell-6-output-1.png"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/welcome/index.html">
+<a href="./posts/clustering/index.html">
 <h3 class="no-anchor listing-title">
 Clustering
 </h3>
@@ -258,7 +231,57 @@ Clustering in Machine Learning is an unsupervised learning technique used to gro
 </a>
 </div>
 <div class="metadata">
-<a href="./posts/welcome/index.html">
+<a href="./posts/clustering/index.html">
+<div class="listing-author">
+Adithya Harish
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1701398560665" data-listing-reading-time-sort="3">
+<div class="thumbnail">
+<p><a href="./posts/linear-regression/index.html"> <img src="./posts/linear-regression/linear.png" class="thumbnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/linear-regression/index.html">
+<h3 class="no-anchor listing-title">
+Linear and Non-Linear Regression
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+<strong>Linear Regression</strong> Linear regression is a fundamental and widely used statistical and machine learning technique for modeling the relationship between a dependent variable (also called the…
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/linear-regression/index.html">
+<div class="listing-author">
+Adithya Harish
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1701399928302" data-listing-reading-time-sort="3">
+<div class="thumbnail">
+<p><a href="./posts/probability-theory/index1.html"> <img src="./posts/probability-theory/probability.png" class="thumbnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/probability-theory/index1.html">
+<h3 class="no-anchor listing-title">
+Probability Theory and Random Variables
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+Probability theory is a mathematical framework used in machine learning to quantify uncertainty…
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/probability-theory/index1.html">
 <div class="listing-author">
 Adithya Harish
 </div>
@@ -507,4 +530,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-</body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/adithyaharish/ML-blog-CS5805/blob/main/index.qmd" class="toc-action">View source</a></p></div></div></div></div></footer></body></html>
