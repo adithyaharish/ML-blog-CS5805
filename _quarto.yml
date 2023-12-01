@@ -1,0 +1,22 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  repo-url: https://github.com/adithyaharish/ML-blog-CS5805
+  repo-actions: [source]
+  title: "ML Blog"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/adithyaharish/ML-blog-CS5805
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+
+ 
+
+
+
