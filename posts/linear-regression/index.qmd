@@ -1,0 +1,120 @@
+---
+title: "Linear and Non-Linear Regression"
+author: "Adithya Harish"
+image: "linear.png"
+---
+
+<table align="left">
+  <td>
+    <a href="https://colab.research.google.com/drive/1L8-Jz0SBXXgG4qFXiG21IwCwsZUXk67N?usp=sharing" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+  </td>
+</table>
+
+# Linear Regression
+
+Linear regression is a fundamental and widely used statistical and machine learning technique for modeling the relationship between a dependent variable (also called the target) and one or more independent variables (also called features or predictors). In Python, you can perform linear regression using various libraries, such as scikit-learn, NumPy, or TensorFlow. Here, I'll describe how to do it with scikit-learn, a popular machine learning library in Python:
+
+## Step 1 - Importing the Dataset
+
+Let's use the "House Prices" dataset from the popular Kaggle competition "House Prices: Advanced Regression Techniques." This dataset contains various features related to residential houses and their sale prices. I have used the `train.csv`.
+
+```{python} 
+
+# Import necessary libraries
+import pandas as pd
+
+# Load the dataset
+data = pd.read_csv('train.csv')
+
+# Explore the dataset
+data.head()
+```
+
+## Step 2: Data Pre-processing
+
+Perform data pre-processing tasks like handling missing values, encoding categorical variables, and scaling features if necessary.
+
+```{python} 
+print(data.isnull().sum())
+
+# Handle missing values (if necessary)
+data['LotFrontage'].fillna(data['LotFrontage'].mean(), inplace=True)
+
+# Encode categorical variables (if necessary)
+data = pd.get_dummies(data, columns=['MSZoning', 'Street'])
+
+# Scale features (if necessary)
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+data[['GrLivArea']] = scaler.fit_transform(data[['GrLivArea']])
+```
+
+## Step 3: Splitting the Test and Train Sets
+
+Split the dataset into a training set and a test set for model evaluation.
+
+```{python} 
+from sklearn.model_selection import train_test_split
+
+X = data[['OverallQual', 'YearBuilt', 'GrLivArea']]  # Select relevant features
+y = data['SalePrice']  # Define the target variable
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+#Fitting the Linear Regression Model to the Training Set
+```
+
+## Step 4: Fitting the Linear Regression Model
+
+Build and train the linear regression model using the training set.
+
+```{python}
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error, r2_score
+
+model = LinearRegression() # Create a linear regression model
+
+model.fit(X_train, y_train) # Fit the model to the training data
+```
+
+## Step 5: Predicting Test Results
+
+Make predictions on the test set.
+
+```{python}
+y_pred = model.predict(X_test)
+```
+
+## Step 6: Visualizing the Test Results
+
+Visualize the model's performance by comparing the actual and predicted values.
+
+```{python}
+plt.scatter(y_test, y_pred) # Scatter plot to visualize actual vs. predicted values
+
+plt.xlabel("Actual Sale Prices")
+plt.ylabel("Predicted Sale Prices")
+plt.title("Actual Sale Prices vs. Predicted Sale Prices")
+plt.show()
+```
+
+## Step 7 - Test Accuracy
+
+To test the accuracy of the linear regression model that was built using the provided code, you can calculate common regression evaluation metrics. Two common metrics are Mean Squared Error (MSE) and R-squared (R²). You can use libraries like scikit-learn to calculate these metrics.
+
+Here's how to test the accuracy and print the MSE and R² for your linear regression model:
+
+```{python}
+# Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Calculate Mean Squared Error (MSE)
+mse = mean_squared_error(y_test, y_pred)
+
+# Calculate R-squared (R²) score
+r2 = r2_score(y_test, y_pred)
+
+print(f"Mean Squared Error (MSE): {mse:.2f}")
+print(f"R-squared (R²) Score: {r2:.2f}")
+```
